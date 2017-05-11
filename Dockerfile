@@ -21,22 +21,21 @@ RUN cd /tmp && tar xjvf ddclient-${DDCLIENT_VERSION}.tar.bz2
 
 RUN cp /tmp/ddclient-${DDCLIENT_VERSION}/ddclient /usr/sbin/ddclient && chmod +x /usr/sbin/ddclient
 
-RUN mkdir /etc/ddclient && mkdir /var/cache/ddclient
-
-RUN adduser -S ddclient && addgroup ddclient
-
 RUN apk del --purge make && \
     rm -rf /root/.cpanm \
            /tmp/*
 
-RUN chown ddclient:ddclient /etc/ddclient && chown ddclient:ddclient /var/cache/ddclient
-
-USER ddclient
+RUN mkdir -m0755 /etc/ddclient && \
+    mkdir -p -m0755 /var/cache/ddclient && \
+    mkdir -p -m0755 /var/run/ddclient
 
 COPY ./ddclient.conf /etc/ddclient/ddclient.conf
+
+RUN chmod 0600 /etc/ddclient/ddclient.conf && \
+    touch /var/cache/ddclient/ddclient.cache
 
 VOLUME /etc/ddclient
 
 STOPSIGNAL SIGQUIT
 
-ENTRYPOINT /usr/sbin/ddclient -debug -verbose -noquiet
+ENTRYPOINT /usr/sbin/ddclient && tail -f /var/cache/ddclient/ddclient.cache
