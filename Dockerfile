@@ -21,7 +21,7 @@ RUN cd /tmp && tar xjvf ddclient-${DDCLIENT_VERSION}.tar.bz2
 
 RUN cp /tmp/ddclient-${DDCLIENT_VERSION}/ddclient /usr/sbin/ddclient && chmod +x /usr/sbin/ddclient
 
-RUN apk del --purge make && \
+RUN apk del --purge make wget curl && \
     rm -rf /root/.cpanm \
            /tmp/*
 
