@@ -38,4 +38,4 @@ VOLUME /etc/ddclient
 
 STOPSIGNAL SIGQUIT
 
-ENTRYPOINT "/usr/sbin/ddclient" "," "tail -f /var/cache/ddclient/ddclient.cache"
+ENTRYPOINT ["/usr/sbin/ddclient", "tail -f /var/cache/ddclient/ddclient.cache"]
